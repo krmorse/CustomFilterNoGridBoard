@@ -7,7 +7,7 @@
 
     <script type="text/javascript">
         Rally.onReady(function () {
-                Ext.define("CustomApp",{extend:"Rally.app.App",componentCls:"app",launch:function(){}});
+                Ext.define("CustomApp",{extend:"Rally.app.App",componentCls:"app",modelNames:["UserStory","Defect"],layout:{type:"vbox",align:"stretch"},launch:function(){var blackListFields=["Successors","Predecessors","DisplayColor"],whiteListFields=["Milestones","Tags"];this.add({xtype:"rallyinlinefiltercontrol",context:this.getContext(),height:26,inlineFilterButtonConfig:{stateful:!0,stateId:this.getContext().getScopedStateId("inline-filter"),context:this.getContext(),modelNames:this.modelNames,filterChildren:!1,inlineFilterPanelConfig:{quickFilterPanelConfig:{defaultFields:["ArtifactSearch","Owner"],addQuickFilterConfig:{blackListFields:blackListFields,whiteListFields:whiteListFields}},advancedFilterPanelConfig:{advancedFilterRowsConfig:{propertyFieldConfig:{blackListFields:blackListFields,whiteListFields:whiteListFields}}}},listeners:{inlinefilterchange:this._onFilterChange,inlinefilterready:this._onFilterReady,scope:this}}})},_onFilterReady:function(inlineFilterPanel){this.add(inlineFilterPanel)},_onFilterChange:function(inlineFilterButton){var filterInfo=inlineFilterButton.getTypesAndFilters();if(this.down("rallygrid")){var store=this.down("rallygrid").getStore();Ext.isEmpty(filterInfo.filters)?store.clearFilter():(store.clearFilter(!0),store.filter(filterInfo.filters))}else this.add({xtype:"rallygrid",context:this.getContext(),columnCfgs:["FormattedID","Name","Owner"],context:this.getContext(),storeConfig:{models:filterInfo.types,filters:filterInfo.filters}})}});
 
             Rally.launchApp('CustomApp', {
                 name:"CustomFilterNoGridBoard",
